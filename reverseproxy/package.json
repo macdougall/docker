@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": "12.14.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/backend/*",
+    "packages/frontend/*"
+  ],
+  "scripts": {
+    "clean": "lerna clean && find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +",
+    "bootstrap": "lerna bootstrap",
+    "start": "lerna run start --parallel",
+    "test": "lerna run test --parallel",
+    "build": "lerna run build --parallel",
+    "docker:nuke": "./docker-nukeall",
+    "docker:clean": "UNKNOWN=$(docker images | grep \"^<none>\" | awk '{print $3}'); if [ -z \"$UNKNOWN\" ]; then echo \"No unkown images\"; exit; else docker rmi --force $UNKNOWN docker volume ls -qf dangling=true; fi",
+    "docker:up": "COMPOSE_PROJECT_NAME=docker_app docker-compose up",
+    "docker:down": "COMPOSE_PROJECT_NAME=docker_app docker-compose down",
+    "docker:stop": "COMPOSE_PROJECT_NAME=docker_app docker-compose stop",
+    "docker:build": "COMPOSE_PROJECT_NAME=docker_app docker-compose build --force-rm --no-cache"
+  },
+  "devDependencies": {
+    "lerna": "^3.11.0"
+  }
+}
